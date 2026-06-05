@@ -112,7 +112,47 @@ tech: [
 "Express",
 "MongoDB"
 ]
-}
+},
+
+{
+title: "Auction House",
+description:
+"A platform where users can sell their items and make online bids.",
+image: "/images/auction.jpg",
+
+github:
+"https://github.com/yourrepo",
+
+live:
+"https://yourliveproject.com",
+
+tech: [
+"HTML",
+"CSS",
+"Javascript",
+"Bootstrap"
+]
+},
+
+{
+title: "Campus Marketplace",
+description:
+"A platform where users can sell and buy stuff insie their college campus.",
+image: "/images/campus.jpg",
+
+github:
+"https://github.com/harshitverma1028/campusmarketplace.git",
+
+live:
+"https://yourliveproject.com",
+
+tech: [
+"React",
+"Tailwind",
+"MongoDB",
+"Node.js"
+]
+},
 ],
 };
 
