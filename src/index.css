@@ -63,3 +63,12 @@ body {
     0.1
   );
 }
+
+
+#projects {
+  overflow: hidden;
+}
+
+#projects img {
+  user-select: none;
+}

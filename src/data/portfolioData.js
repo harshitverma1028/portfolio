@@ -73,26 +73,6 @@ const portfolioData = {
 
  projects: [
 {
-title: "CareFlow AI",
-description:
-"AI-powered healthcare management platform with appointment booking and doctor recommendation.",
-image: "/images/careflow.jpg",
-
-github:
-"https://github.com/yourrepo",
-
-live:
-"https://yourliveproject.com",
-
-tech: [
-"React",
-"Node",
-"MongoDB",
-"AI"
-]
-},
-
-{
 title: "AETHER",
 description:
 "Smart Office Management System using your voice command.",
@@ -111,6 +91,26 @@ tech: [
 "Socket.io",
 "Express",
 "MongoDB"
+]
+},
+
+{
+title: "CareFlow AI",
+description:
+"AI-powered healthcare management platform with appointment booking and doctor recommendation.",
+image: "/images/careflow.jpg",
+
+github:
+"https://github.com/yourrepo",
+
+live:
+"https://yourliveproject.com",
+
+tech: [
+"React",
+"Node",
+"MongoDB",
+"AI"
 ]
 },
 
@@ -158,7 +158,7 @@ tech: [
 title: "Prashikshanam",
 description:
 "AI Based Internship Recommendtion Engine",
-image: "/images/campus.jpg",
+image: "/images/prashikshanam.jpg",
 
 github:
 "https://github.com/harshitverma1028/campusmarketplace.git",
