@@ -30,7 +30,7 @@ const portfolioData = {
     "B.Tech student passionate about Full Stack Development, Data Structures & Algorithms and Software Engineering.",
 
   stats: {
-    projects: "5+",
+    projects: "10+",
     dsa: "500+",
     technologies: "10+",
   },
@@ -138,6 +138,26 @@ tech: [
 title: "Campus Marketplace",
 description:
 "A platform where users can sell and buy stuff insie their college campus.",
+image: "/images/campus.jpg",
+
+github:
+"https://github.com/harshitverma1028/campusmarketplace.git",
+
+live:
+"https://yourliveproject.com",
+
+tech: [
+"React",
+"Tailwind",
+"MongoDB",
+"Node.js"
+]
+},
+
+{
+title: "Prashikshanam",
+description:
+"AI Based Internship Recommendtion Engine",
 image: "/images/campus.jpg",
 
 github:
