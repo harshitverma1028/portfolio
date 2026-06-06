@@ -38,15 +38,19 @@ function Skills() {
             <div
               key={section.title}
               className={`
-                relative
-                flex
-                mb-40
-                ${
-                  index % 2 === 0
-                    ? "justify-end"
-                    : "justify-start"
-                }
-              `}
+  relative
+  flex
+  ${
+    index === skillSections.length - 1
+      ? "mb-0"
+      : "mb-16"
+  }
+  ${
+    index % 2 === 0
+      ? "justify-end"
+      : "justify-start"
+  }
+`}
             >
               <motion.div
                 initial={{

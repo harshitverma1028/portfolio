@@ -11,6 +11,7 @@ import ScrollProgress from "../components/ScrollProgress";
 import BackgroundGlow from "../components/BackgroundGlow";
 import CustomCursor from "../components/CustomCursor";
 import ParticlesBackground from "../components/ParticlesBackground";
+import GitHubActivity from "../components/GitHubActivity";
 
 function Home() {
   return (
@@ -35,6 +36,8 @@ function Home() {
         <DSA />
 
         <Projects />
+
+        <GitHubActivity />
 
         <Contact />
       </main>
