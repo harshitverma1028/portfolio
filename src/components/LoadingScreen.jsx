@@ -42,7 +42,7 @@ function LoadingScreen() {
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{
-              duration: 2,
+              duration: 0.7,
             }}
             className="
             h-full
