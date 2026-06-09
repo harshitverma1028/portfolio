@@ -77,7 +77,7 @@ function Skills() {
                 className="
                 relative
                 w-full
-                md:w-[500px]
+                md:w-125
                 glass
                 rounded-[30px]
                 p-8

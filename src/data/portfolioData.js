@@ -141,10 +141,10 @@ description:
 image: "/images/campus.jpg",
 
 github:
-"https://github.com/harshitverma1028/campusmarketplace.git",
+"https://github.com/harshitverma1028/campusX.git",
 
 live:
-"https://yourliveproject.com",
+"https://campusx-1-1p65.onrender.com/",
 
 tech: [
 "React",
