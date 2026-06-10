@@ -66,7 +66,9 @@ function Hero() {
             rounded-full
             border-3
             border-cyan-500
-            object-fit
+            object-[top_25%]
+            overflow-hidden
+            object-cover
             shadow-2xl
           "
         />

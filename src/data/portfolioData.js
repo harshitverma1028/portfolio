@@ -24,7 +24,7 @@ const portfolioData = {
   resume:
     "/resume.pdf",
 
-  profile:"/images/profile.jpg",
+  profile:"/images/mypicc.png",
 
   about:
     "B.Tech student passionate about Full Stack Development, Data Structures & Algorithms and Software Engineering.",
