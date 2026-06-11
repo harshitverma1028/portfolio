@@ -112,8 +112,6 @@ function Hero() {
             sequence={[
               "Frontend Developer",
               2000,
-              "DSA Solver",
-              2000,
               "Problem Solver",
               2000,
               "Full Stack Developer",
