@@ -95,6 +95,26 @@ tech: [
 },
 
 {
+title: "Campus Marketplace",
+description:
+"A platform where users can sell and buy stuff insie their college campus.",
+image: "/images/campus.jpg",
+
+github:
+"https://github.com/harshitverma1028/campusX.git",
+
+live:
+"https://campusx-1-1p65.onrender.com/",
+
+tech: [
+"React",
+"Tailwind",
+"MongoDB",
+"Node.js"
+]
+},
+
+{
 title: "CareFlow AI",
 description:
 "AI-powered healthcare management platform with appointment booking and doctor recommendation.",
@@ -131,26 +151,6 @@ tech: [
 "CSS",
 "Javascript",
 "Bootstrap"
-]
-},
-
-{
-title: "Campus Marketplace",
-description:
-"A platform where users can sell and buy stuff insie their college campus.",
-image: "/images/campus.jpg",
-
-github:
-"https://github.com/harshitverma1028/campusX.git",
-
-live:
-"https://campusx-1-1p65.onrender.com/",
-
-tech: [
-"React",
-"Tailwind",
-"MongoDB",
-"Node.js"
 ]
 },
 
