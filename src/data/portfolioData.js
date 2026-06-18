@@ -31,7 +31,7 @@ const portfolioData = {
 
   stats: {
     projects: "10+",
-    dsa: "500+",
+    dsa: "600+",
     technologies: "10+",
   },
 
@@ -88,6 +88,8 @@ live:
 
 tech: [
 "React",
+"Tailwind",
+"Node.js",
 "Socket.io",
 "Express",
 "MongoDB"
