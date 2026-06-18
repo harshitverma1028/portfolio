@@ -65,7 +65,7 @@ const portfolioData = {
     ],
   },
   dsa: {
-  solved: "500+",
+  solved: "600+",
   contests: "50+",
   leetcodeRating: "1800+",
   badges: "20+",
