@@ -123,7 +123,7 @@ description:
 image: "/images/careflow.jpg",
 
 github:
-"https://github.com/yourrepo",
+"https://github.com/harshitverma1028/careflow.git",
 
 live:
 "https://yourliveproject.com",
