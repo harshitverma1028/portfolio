@@ -8,15 +8,6 @@ import {
 } from "framer-motion";
 import portfolioData from "../data/portfolioData";
 
-/* ---------------------------------------------------------------------- */
-/*  Design tokens                                                         */
-/*  bg      #05070D   near-black canvas                                   */
-/*  surface rgba(16,20,32,.55)  glass card                                */
-/*  cyan    #22D3EE   Frontend                                            */
-/*  violet  #9D7BFF   Backend                                             */
-/*  amber   #FBBF24   Database                                            */
-/*  mint    #34D399   Tools                                               */
-/* ---------------------------------------------------------------------- */
 
 const ACCENTS = ["#22D3EE", "#9D7BFF", "#FBBF24", "#34D399"];
 
