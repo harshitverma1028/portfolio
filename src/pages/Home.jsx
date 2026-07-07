@@ -7,7 +7,6 @@ import Projects from "../components/Projects";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 
-import ScrollProgress from "../components/ScrollProgress";
 import BackgroundGlow from "../components/BackgroundGlow";
 import CustomCursor from "../components/CustomCursor";
 import ParticlesBackground from "../components/ParticlesBackground";
@@ -20,7 +19,6 @@ function Home() {
 
       <CustomCursor />
 
-      <ScrollProgress />
 
       <BackgroundGlow />
 
