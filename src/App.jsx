@@ -15,16 +15,14 @@ function App() {
     return () =>
       clearTimeout(timer);
   }, []);
+  const [entered, setEntered] = useState(false);
 
   return (
     <>
-      {loading ? (
-        <LoadingScreen />
-      ) : (
+        {!entered && <LoadingScreen onComplete={() => setEntered(true)} />}
         <Home />
-      )}
-    </>
-  );
+      </>
+    );
 }
 
 export default App;
