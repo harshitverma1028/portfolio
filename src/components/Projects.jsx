@@ -1,18 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import portfolioData from "../data/portfolioData";
 
-/*
-  MECHANIC:
-  - Section is scroll-pinned (sticky) for (projects.length * 150vh)
-  - scrollProgress 0→1 drives an "angle" that rotates all cards
-    around a virtual cylinder centred on the spine.
-  - Each card sits at its own fixed angle offset on that cylinder.
-  - As you scroll the cylinder rotates: the front card comes to 0°
-    (fully visible, large, bright) while others arc back.
-  - The spine is rendered as a thick 3D cylinder with CSS box-shadow
-    layering + a radial gradient to fake a lit round surface.
-*/
-
 const CARD_W = 300;
 const CARD_H = 390;
 const ORBIT_R = 320;   // "radius" of the orbit in px (horizontal push)
@@ -111,22 +99,6 @@ export default function Projects() {
           pointer-events: none;
         }
 
-        /* ─── 3-D trunk ───────────────────────────────────────── */
-        
-        /* The actual cylinder body */
-        
-        /* Top cap (ellipse illusion) */
-        
-        /* Flowing energy stripe */
-        
-        /* Spine node dots */
-        
-        
-
-        /* ─── root SVG ────────────────────────────────────────── */
-        
-
-        /* ─── 3-D stage ───────────────────────────────────────── */
         .orbit-stage {
           position: absolute;
           inset: 0;
@@ -150,15 +122,15 @@ export default function Projects() {
           height:${CARD_H}px;
           margin-left:-${CARD_W / 2}px;
           margin-top:-${CARD_H / 2}px;
-          border-radius:24px;
+          border-radius:2px;
           overflow:hidden;
           cursor:pointer;
           transition:transform .65s cubic-bezier(.22,1,.36,1),opacity .5s,filter .5s,border-color .3s,box-shadow .35s;
           background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.02) 40%,rgba(6,182,212,.04) 70%,rgba(99,102,241,.08));
-          backdrop-filter:blur(26px);
+          backdrop-filter:blur(10px);
           -webkit-backdrop-filter:blur(26px);
           border:1px solid rgba(255,255,255,.12);
-          box-shadow:0 30px 70px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.05);
+          box-shadow:0 12px 28px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.18), inset 0 -1px 0 rgba(255,255,255,.05);
           transform-style:preserve-3d;
           will-change:transform,opacity;
         }
@@ -335,15 +307,6 @@ export default function Projects() {
           text-transform: uppercase; color: rgba(255,255,255,.28);
         }
 
-        /* particle */
-        .pjs-particle {
-          position: absolute;
-          width: 3px; height: 3px; border-radius: 50%;
-          background: rgba(6,182,212,.85);
-          animation: floatUp var(--pdur) ease-out infinite;
-          animation-delay: var(--pdel);
-          pointer-events: none;
-        }
       `}</style>
 
       <section
@@ -356,28 +319,12 @@ export default function Projects() {
           <div className="pjs-vignette" />
 
           {/* Particles */}
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="pjs-particle" style={{
-              left: `calc(50% + ${(i % 2 === 0 ? 8 : -8)}px)`,
-              bottom: `${8 + i * 8}%`,
-              "--pdx": `${(i % 2 === 0 ? 22 : -22) + i * 2}px`,
-              "--pdur": `${3 + i * .3}s`,
-              "--pdel": `${i * .45}s`,
-            }} />
-          ))}
+          
 
           {/* ── 3-D Orbit Stage ───────────────────────────────── */}
           <div className="orbit-stage">
             <div className="orbit-pivot">
               {projects.map((project, i) => {
-                /*
-                  Each card has a "home angle" spaced evenly around the cylinder.
-                  As scrollPct rises, we rotate the whole cylinder so card i
-                  comes to front (angle = 0 = facing viewer).
-
-                  angleDeg: how far this card is from the front (0° = directly in front)
-                  We map that to X position and Z depth.
-                */
                 const homeAngle = i * STEP;           // 0, 72, 144 ... for 5 cards
                 // Current rotation of the cylinder (negative = rotating so higher i comes front)
                 const cylinderRot = -frontF * STEP;
@@ -404,6 +351,8 @@ export default function Projects() {
 
                 const isFront = i === activeIdx;
                 const isHov   = hovered === i;
+
+                
 
                 // branch line from trunk to card
                 const branchTopPct = 12 + (i * 76) / Math.max(N - 1, 1);
@@ -432,7 +381,6 @@ export default function Projects() {
                           scale(${scaleV * (isHov ? 1.04 : 1)})
                         `,
                         opacity: opacV,
-                        filter: blurV > 0 ? `blur(${blurV}px)` : "none",
                         zIndex: Math.round(cosA * 50) + 60,
                         pointerEvents: cosA < -0.2 ? "none" : "auto",
                       }}
