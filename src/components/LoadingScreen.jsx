@@ -26,6 +26,12 @@ function LoadingScreen({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const hasTriggered = useRef(false);
 
+  const trigger = () => {
+    if (hasTriggered.current) return;
+    hasTriggered.current = true;
+    setPhase("opening");
+  };
+
   // fake but smooth progress counter, purely for atmosphere
   useEffect(() => {
     if (phase !== "intro") return;
@@ -48,12 +54,6 @@ function LoadingScreen({ onComplete }) {
   // listen for the "open the shutter" gesture once we're ready
   useEffect(() => {
     if (phase !== "ready") return;
-
-    const trigger = () => {
-      if (hasTriggered.current) return;
-      hasTriggered.current = true;
-      setPhase("opening");
-    };
 
     let touchY = 0;
     const handleWheel = (e) => e.deltaY > 0 && trigger();
@@ -87,7 +87,7 @@ function LoadingScreen({ onComplete }) {
 
   if (phase === "done") return null;
 
-  const letters = Array.from(NAME);
+  const words = NAME.split(" ");
 
   return (
     <motion.div
@@ -153,30 +153,37 @@ function LoadingScreen({ onComplete }) {
         Portfolio
       </motion.span>
 
-      {/* name, letter by letter with a blur-to-focus reveal */}
-      <div className="relative flex flex-wrap justify-center px-6 text-center">
-        {letters.map((char, i) => (
-          <motion.span
-            key={i}
-            initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-              delay: 0.25 + i * 0.05,
-              duration: 0.7,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-            className="text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-400 [text-shadow:0_0_40px_rgba(34,211,238,0.35)] sm:text-7xl"
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
+      {/* name, letter by letter with a blur-to-focus reveal — wraps by word, not mid-word */}
+      <div className="relative flex flex-wrap justify-center gap-x-4 px-6 text-center">
+        {words.map((word, wi) => {
+          const priorLetters = words.slice(0, wi).join("").length;
+          return (
+            <span key={wi} className="inline-flex">
+              {Array.from(word).map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{
+                    delay: 0.25 + (priorLetters + i) * 0.05,
+                    duration: 0.7,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-400 [text-shadow:0_0_40px_rgba(34,211,238,0.35)] sm:text-6xl md:text-7xl"
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </span>
+          );
+        })}
       </div>
 
       {/* role / tagline typed in under the name */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.25 + letters.length * 0.05 + 0.3, duration: 0.6 }}
+        transition={{ delay: 0.25 + NAME.replace(" ", "").length * 0.05 + 0.3, duration: 0.6 }}
         className="relative mt-4 text-sm tracking-[0.15em] text-slate-400"
       >
         Full-Stack Developer
@@ -197,8 +204,11 @@ function LoadingScreen({ onComplete }) {
         </span>
       </div>
 
-      {/* scroll hint, only shown once ready */}
-      <motion.div
+      {/* scroll/tap hint, only shown once ready */}
+      <motion.button
+        type="button"
+        onClick={trigger}
+        aria-label="Enter portfolio"
         initial={{ opacity: 0 }}
         animate={{ opacity: phase === "ready" ? 1 : 0 }}
         transition={{ duration: 0.6 }}
@@ -214,7 +224,7 @@ function LoadingScreen({ onComplete }) {
         >
           <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
         </motion.div>
-      </motion.div>
+      </motion.button>
     </motion.div>
   );
 }
