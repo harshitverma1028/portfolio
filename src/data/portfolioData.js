@@ -119,7 +119,7 @@ tech: [
 {
 title: "Hammerly",
 description:
-"A online bidding platform for ral time users.",
+"A online bidding platform for live auction.",
 image: "/images/hammerly.jpg",
 
 github:
