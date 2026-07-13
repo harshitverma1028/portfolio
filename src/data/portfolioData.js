@@ -67,7 +67,7 @@ const portfolioData = {
   dsa: {
   solved: "600+",
   contests: "50+",
-  leetcodeRating: "1800+",
+  leetcodeRating: "1850+",
   badges: "20+",
 },
 
@@ -113,6 +113,28 @@ tech: [
 "Tailwind",
 "MongoDB",
 "Node.js"
+]
+},
+
+{
+title: "Hammerly",
+description:
+"A online bidding platform for ral time users.",
+image: "/images/hammerly.jpg",
+
+github:
+"https://github.com/harshitverma1028/Hammerly.git",
+
+live:
+"https://hammerly.onrender.com/",
+
+tech: [
+"React",
+"Tailwind",
+"Javascript",
+"Node.js",
+"MondoDB",
+"Cloudinary"
 ]
 },
 
