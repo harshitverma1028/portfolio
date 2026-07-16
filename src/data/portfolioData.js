@@ -197,7 +197,46 @@ tech: [
 "Node.js"
 ]
 },
+
+],
+
+
+certifications: [
+  {
+    id: 1,
+    title: "AWS Cloud Architecting-Training",
+    issuer: "Amazon Web Services",
+    date: "Nov 2025",
+    color: "#FF9900",
+    pdf: "/certificates/aws.pdf",
+  },
+  {
+    id: 2,
+    title: "MERN Stack Development",
+    issuer: "Koenig",
+    date: "June 2026",
+    color: "#A435F0",
+    pdf: "/certificates/koenig.pdf",
+  },
+  {
+    id: 3,
+    title: "Hackathon",
+    issuer: "Cognizant",
+    date: "March 2026",
+    color: "#00C896",
+    pdf: "/certificates/cognizant.pdf",
+  },
+  {
+    id: 4,
+    title: "GenAI	Powered	Data	Analytics	Job	Simulation",
+    issuer: "Forage",
+    date: "June 2026",
+    color: "#F44336",
+    pdf: "/certificates/forage.pdf",
+  },
 ],
 };
+
+
 
 export default portfolioData;

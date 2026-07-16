@@ -2,25 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const NAME = "HARSHIT VERMA";
-
-/**
- * Usage in App.jsx:
- *
- *   const [entered, setEntered] = useState(false);
- *
- *   return (
- *     <>
- *       {!entered && <LoadingScreen onComplete={() => setEntered(true)} />}
- *       <YourPortfolioContent />
- *     </>
- *   );
- *
- * Flow:
- *  1. "intro"   -> name types/fades in letter by letter
- *  2. "ready"   -> a "scroll to enter" hint appears, screen listens for scroll/swipe/keydown
- *  3. "opening" -> the whole screen slides up like a shutter, revealing the portfolio underneath
- *  4. "done"    -> component unmounts, page scroll is restored
- */
 function LoadingScreen({ onComplete }) {
   const [phase, setPhase] = useState("intro"); // intro -> ready -> opening -> done
   const [progress, setProgress] = useState(0);

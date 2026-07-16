@@ -11,6 +11,7 @@ import BackgroundGlow from "../components/BackgroundGlow";
 import CustomCursor from "../components/CustomCursor";
 import ParticlesBackground from "../components/ParticlesBackground";
 import GitHubActivity from "../components/GitHubActivity";
+import Certifications from "../components/Certifications";
 
 function Home() {
   return (
@@ -34,6 +35,8 @@ function Home() {
         <DSA />
 
         <Projects />
+
+        <Certifications />
 
         <GitHubActivity />
 

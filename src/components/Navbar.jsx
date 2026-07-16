@@ -1,192 +1,204 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
 import portfolioData from "../data/portfolioData";
-
-/* Same theme as Hero / Skills:
-   bg #05070D   cyan #22D3EE   violet #9D7BFF                       */
 
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Skills", href: "#skills" },
   { name: "DSA", href: "#dsa" },
   { name: "Projects", href: "#projects" },
+  { name: "Certificates", href: "#certifications" },
   { name: "Contact", href: "#contact" },
 ];
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [hovered, setHovered] = useState(null);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <div className="fixed top-0 left-0 w-full z-50 flex justify-center px-4 pt-4">
-      <motion.nav
-        animate={{
-          maxWidth: scrolled ? 880 : 1120,
-          paddingTop: scrolled ? 8 : 14,
-          paddingBottom: scrolled ? 8 : 14,
-        }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        className="w-full rounded-full border backdrop-blur-xl px-6"
-        style={{
-          background: scrolled
-            ? "rgba(10,13,22,0.75)"
-            : "rgba(10,13,22,0.45)",
-          borderColor: "rgba(34,211,238,0.15)",
-          boxShadow: scrolled
-            ? "0 8px 30px -12px rgba(34,211,238,0.25)"
-            : "none",
-        }}
-      >
-        <div className="flex justify-between items-center">
+    <>
+      {/* Desktop Navbar */}
+
+      <header className="fixed top-0 left-0 w-full z-50">
+        <div className="max-w-7xl mx-auto h-24 px-8 lg:px-12 flex items-center justify-between">
+
+          {/* Logo */}
+
           <motion.a
             href="#home"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="text-2xl md:text-3xl font-bold gradient-text"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+            className="text-3xl font-bold gradient-text select-none"
           >
             {portfolioData.name}
           </motion.a>
 
-          <div className="hidden md:flex items-center gap-1 relative">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onMouseEnter={() => setHovered(i)}
+          {/* Navigation */}
+
+          <nav className="hidden md:flex items-center relative gap-12">
+
+            {navLinks.map((item, index) => (
+              <motion.a
+                key={item.name}
+                href={item.href}
+                onMouseEnter={() => setHovered(index)}
                 onMouseLeave={() => setHovered(null)}
-                className="relative px-4 py-2 rounded-full text-slate-300 hover:text-cyan-300 transition-colors"
+                className="relative py-2 text-[15px] font-medium tracking-wide text-white hover:text-cyan-400 transition-colors duration-300"
               >
-                {hovered === i && (
+                {item.name}
+
+                {hovered === index && (
                   <motion.div
-                    layoutId="nav-hover-pill"
-                    className="absolute inset-0 rounded-full -z-10"
-                    style={{ background: "rgba(34,211,238,0.12)" }}
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    layoutId="navbar-indicator"
+                    className="absolute left-0 right-0 -bottom-1 h-[2px] rounded-full bg-cyan-400"
+                    transition={{
+                      type: "spring",
+                      stiffness: 450,
+                      damping: 32,
+                    }}
                   />
                 )}
-                <span className="relative z-10">{link.name}</span>
-              </a>
+              </motion.a>
             ))}
-          </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          </nav>
+
+          {/* Social Icons */}
+
+          <div className="hidden md:flex items-center gap-6">
+
             <motion.a
               href={portfolioData.github}
               target="_blank"
               rel="noreferrer"
-              whileHover={{ scale: 1.15, rotate: -8, color: "#22D3EE" }}
+              whileHover={{
+                scale: 1.15,
+                y: -3,
+              }}
               whileTap={{ scale: 0.9 }}
-              className="text-slate-300"
+              className="text-slate-400 hover:text-white transition-colors"
             >
               <FaGithub size={22} />
             </motion.a>
+
             <motion.a
               href={portfolioData.linkedin}
               target="_blank"
               rel="noreferrer"
-              whileHover={{ scale: 1.15, rotate: 8, color: "#9D7BFF" }}
+              whileHover={{
+                scale: 1.15,
+                y: -3,
+              }}
               whileTap={{ scale: 0.9 }}
-              className="text-slate-300"
+              className="text-slate-400 hover:text-[#0A66C2] transition-colors"
             >
               <FaLinkedin size={22} />
             </motion.a>
+
           </div>
 
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            className="md:hidden text-slate-200"
+          {/* Mobile Button */}
+
+          <button
             onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            className="md:hidden text-white"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              {isOpen ? (
-                <motion.span
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="block"
-                >
-                  <FaTimes size={22} />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="bars"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="block"
-                >
-                  <FaBars size={22} />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            {isOpen ? (
+              <FaTimes size={24} />
+            ) : (
+              <FaBars size={24} />
+            )}
+          </button>
+
         </div>
-      </motion.nav>
+      </header>
+
+      {/* Mobile Menu */}
 
       <AnimatePresence>
+
         {isOpen && (
+
           <motion.div
-            initial={{ opacity: 0, y: -12, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="md:hidden glass fixed top-20 left-4 right-4 rounded-3xl p-5 border"
-            style={{ borderColor: "rgba(34,211,238,0.15)" }}
+            initial={{
+              opacity: 0,
+              y: -30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -30,
+            }}
+            transition={{
+              duration: 0.25,
+            }}
+            className="fixed top-20 left-4 right-4 md:hidden rounded-3xl bg-[#0b1220]/95 backdrop-blur-xl border border-cyan-500/20 overflow-hidden z-40"
           >
-            <motion.div
-              className="flex flex-col gap-1"
-              initial="hidden"
-              animate="show"
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
-              }}
-            >
-              {navLinks.map((link) => (
+
+            <div className="flex flex-col py-4">
+
+              {navLinks.map((item) => (
+
                 <motion.a
-                  key={link.name}
-                  href={link.href}
+                  key={item.name}
+                  href={item.href}
                   onClick={() => setIsOpen(false)}
-                  variants={{
-                    hidden: { opacity: 0, x: -12 },
-                    show: { opacity: 1, x: 0 },
+                  whileHover={{
+                    x: 6,
                   }}
-                  whileHover={{ x: 4 }}
-                  className="px-3 py-2 rounded-xl text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/5 transition-colors"
+                  className="px-6 py-4 text-slate-300 hover:text-cyan-400 transition"
                 >
-                  {link.name}
+                  {item.name}
                 </motion.a>
+
               ))}
 
-              <motion.div
-                variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}
-                className="flex gap-5 pt-4 mt-2 border-t border-slate-800 px-3"
-              >
-                <a href={portfolioData.github} target="_blank" rel="noreferrer" className="text-slate-300 hover:text-cyan-400">
-                  <FaGithub size={22} />
-                </a>
-                <a href={portfolioData.linkedin} target="_blank" rel="noreferrer" className="text-slate-300 hover:text-violet-400">
-                  <FaLinkedin size={22} />
-                </a>
-              </motion.div>
-            </motion.div>
+              <div className="border-t border-slate-700 mt-2 pt-5 px-6 flex gap-6">
+
+                <motion.a
+                  whileHover={{
+                    scale: 1.15,
+                  }}
+                  href={portfolioData.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-400 hover:text-white"
+                >
+                  <FaGithub size={23} />
+                </motion.a>
+
+                <motion.a
+                  whileHover={{
+                    scale: 1.15,
+                  }}
+                  href={portfolioData.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-slate-400 hover:text-[#0A66C2]"
+                >
+                  <FaLinkedin size={23} />
+                </motion.a>
+
+              </div>
+
+            </div>
+
           </motion.div>
+
         )}
+
       </AnimatePresence>
-    </div>
+
+    </>
   );
 }
 
