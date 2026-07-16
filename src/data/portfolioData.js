@@ -31,7 +31,7 @@ const portfolioData = {
 
   stats: {
     projects: "10+",
-    dsa: "600+",
+    dsa: "700+",
     technologies: "10+",
   },
 
@@ -65,7 +65,7 @@ const portfolioData = {
     ],
   },
   dsa: {
-  solved: "600+",
+  solved: "700+",
   contests: "50+",
   leetcodeRating: "1850+",
   badges: "20+",
