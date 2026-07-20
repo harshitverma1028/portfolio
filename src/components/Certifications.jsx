@@ -2,8 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import portfolioData from "../data/portfolioData";
 
-// Fixed "random-looking" positioning so cards land in different
-// quadrants around the center title but never overlap it.
 const LAYOUT = [
   { pos: "top-[2%] left-[1%] md:left-[4%]", rotate: -7, duration: 6.5, delay: 0 },
   { pos: "top-[4%] right-[1%] md:right-[5%]", rotate: 6, duration: 7.2, delay: 0.6 },
@@ -72,7 +70,7 @@ function Certifications() {
                 rounded-[34px]
                 border-[6px]
                 border-slate-800/90
-                bg-gradient-to-b
+                bg-linear-to-b
                 from-slate-900
                 to-black
                 shadow-2xl
@@ -153,7 +151,7 @@ function Certifications() {
         </div>
 
         {/* Desktop / tablet: floating scattered layout with centered title */}
-        <div className="hidden md:block relative min-h-[800px]">
+        <div className="hidden md:block relative min-h-200">
 
           <div className="absolute top-60 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
   <div className="text-center">
@@ -188,7 +186,7 @@ function Certifications() {
               flex
               items-center
               justify-center
-              z-[999]
+              z-999
               p-4
             "
             onClick={() => setSelected(null)}
