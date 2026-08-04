@@ -1,346 +1,589 @@
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+
 import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionTemplate,
-  useReducedMotion,
-} from "framer-motion";
+  FaReact,
+  FaNodeJs,
+  FaGitAlt,
+  FaGithub,
+  FaHtml5,
+  FaCss3Alt,
+  FaJs,
+  FaDatabase,
+  FaTools,
+  FaCode,
+  FaServer,
+} from "react-icons/fa";
+
+import {
+  SiTailwindcss,
+  SiExpress,
+  SiMongodb,
+  SiMysql,
+  SiPostgresql,
+  SiVite,
+  SiPostman,
+  SiSocketdotio,
+  SiTypescript,
+  SiRedux,
+  SiDocker,
+} from "react-icons/si";
+
 import portfolioData from "../data/portfolioData";
 
+/* ------------------------------------------------------- */
+/* ICON MAP                                                */
+/* ------------------------------------------------------- */
 
-const ACCENTS = ["#22D3EE", "#9D7BFF", "#FBBF24", "#34D399"];
+const SKILL_ICONS = {
+  react: FaReact,
+  "react.js": FaReact,
+  reactjs: FaReact,
 
-const CARD_W = 290;
-const CARD_H = 230;
-const V_GAP = 130; // vertical rhythm while stacked (fanned-deck overlap is intentional)
-const H_GAP =
-  typeof window !== "undefined"
-    ? Math.min(320, window.innerWidth / 4.8)
-    : 300; // horizontal rhythm once unfurled
+  javascript: FaJs,
+  js: FaJs,
 
-const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
-const lerp = (a, b, t) => a + (b - a) * t;
-const remap = (v, a, b) => clamp((v - a) / (b - a));
+  typescript: SiTypescript,
+  ts: SiTypescript,
 
-/** Single source of truth for where card `i` (of `n`) sits at scroll
- *  progress `p`. Used by both the card itself and the connector lines so
- *  everything stays perfectly in sync. */
-function layoutFor(p, i, n) {
-  const arrange = remap(p, 0.42 + i * 0.02, 0.86 + i * 0.02);
+  html: FaHtml5,
+  html5: FaHtml5,
 
-  const xV = i % 2 === 0 ? 100 : -100;
-  const yV = (i - (n - 1) / 2) * V_GAP;
-  const spread = Math.min(window.innerWidth * 0.22, 300);
-const xH = (i - (n - 1) / 2) * spread;
-  const yH = 0;
+  css: FaCss3Alt,
+  css3: FaCss3Alt,
 
-  const x = lerp(xV, xH, arrange);
-  const y = lerp(yV, yH, arrange);
+  tailwind: SiTailwindcss,
+  "tailwind css": SiTailwindcss,
+  tailwindcss: SiTailwindcss,
 
-  const wobble = Math.sin(arrange * Math.PI); // 0 -> 1 -> 0 across the flip
-  const rotateY = wobble * (i % 2 === 0 ? 16 : -16);
-  const scale = 1 - wobble * 0.12;
-  const blur = wobble * 4;
+  node: FaNodeJs,
+  "node.js": FaNodeJs,
+  nodejs: FaNodeJs,
 
-  const entrance = remap(p, i * 0.045, 0.3 + i * 0.045);
-  const rotateX = lerp(65, 0, entrance);
-  const opacity = entrance;
+  express: SiExpress,
+  "express.js": SiExpress,
+  expressjs: SiExpress,
 
-  return { x, y, rotateX, rotateY, scale, blur, opacity, arrange };
-}
+  mongodb: SiMongodb,
+  mongo: SiMongodb,
 
-function JourneyCard({ section, index, total, accent, scrollYProgress }) {
-  const rawX = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).x);
-  const rawY = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).y);
-  const rotateX = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).rotateX);
-  const rotateY = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).rotateY);
-  const scale = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).scale);
-  const opacity = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).opacity);
-  const blurPx = useTransform(scrollYProgress, (p) => layoutFor(p, index, total).blur);
-  const filter = useMotionTemplate`blur(${blurPx}px)`;
+  mysql: SiMysql,
+  postgresql: SiPostgresql,
+  postgres: SiPostgresql,
+
+  git: FaGitAlt,
+  github: FaGithub,
+
+  vite: SiVite,
+  postman: SiPostman,
+
+  "socket.io": SiSocketdotio,
+  socketio: SiSocketdotio,
+
+  redux: SiRedux,
+  docker: SiDocker,
+};
+
+/* ------------------------------------------------------- */
+/* CARD CONFIG                                             */
+/* ------------------------------------------------------- */
+
+const CARD_CONFIG = [
+  {
+    key: "frontend",
+    title: "Frontend",
+    description: "Interfaces & experiences",
+    icon: FaCode,
+    accent: "#22D3EE",
+  },
+
+  {
+    key: "backend",
+    title: "Backend",
+    description: "APIs & server systems",
+    icon: FaServer,
+    accent: "#A78BFA",
+  },
+
+  {
+    key: "database",
+    title: "Database",
+    description: "Data & persistence",
+    icon: FaDatabase,
+    accent: "#34D399",
+  },
+
+  {
+    key: "tools",
+    title: "Tools",
+    description: "Development workflow",
+    icon: FaTools,
+    accent: "#F59E0B",
+  },
+];
+
+/* ------------------------------------------------------- */
+/* SKILL ITEM                                              */
+/* ------------------------------------------------------- */
+
+function SkillItem({ skill, accent }) {
+  const normalizedSkill = skill.toLowerCase().trim();
+
+  const Icon =
+    SKILL_ICONS[normalizedSkill] ||
+    FaCode;
 
   return (
-    <motion.div
-      style={{
-        x: rawX,
-        y: rawY,
-        rotateX,
-        rotateY,
-        scale,
-        opacity,
-        filter,
-        width: CARD_W,
-        height: CARD_H,
-        zIndex: index,
-        position: "absolute",
-      }}
-      whileHover={{ y: -8, scale: 1.04, transition: { duration: 0.25 } }}
-      className="rounded-[26px] p-6 border backdrop-blur-xl"
+    <div
+      className="
+        group/skill
+        flex
+        items-center
+        gap-2
+        rounded-lg
+        border
+        border-white/[0.055]
+        bg-white/[0.025]
+        px-2.5
+        py-2
+        transition-all
+        duration-200
+        hover:-translate-y-[1px]
+        hover:border-white/[0.12]
+        hover:bg-white/[0.05]
+      "
     >
-      <div
-        className="absolute inset-0 rounded-[26px] -z-10"
-        style={{
-          background:
-            "linear-gradient(160deg, rgba(16,20,32,0.75), rgba(8,10,18,0.55))",
-          border: `1px solid ${accent}33`,
-          boxShadow: `0 0 40px -18px ${accent}88`,
-        }}
+      <Icon
+        className="
+          shrink-0
+          text-[15px]
+          transition-transform
+          duration-200
+          group-hover/skill:scale-110
+        "
+        style={{ color: accent }}
       />
 
       <span
-        className="font-mono text-xs tracking-widest"
-        style={{ color: accent }}
+        className="
+          min-w-0
+          truncate
+          text-[11px]
+          font-medium
+          text-slate-400
+          transition-colors
+          group-hover/skill:text-slate-200
+        "
       >
-        {String(index + 1).padStart(2, "0")}
+        {skill}
       </span>
+    </div>
+  );
+}
 
-      <h3
-        className="text-2xl font-bold mt-2 mb-4"
-        style={{ color: accent, fontFamily: "'Space Grotesk', sans-serif" }}
-      >
-        {section.title}
-      </h3>
+/* ------------------------------------------------------- */
+/* SKILL CARD                                              */
+/* ------------------------------------------------------- */
 
-      <div className="flex flex-wrap gap-2 overflow-hidden max-h-[120px]">
+function SkillCard({
+  section,
+  index,
+  reduceMotion,
+}) {
+  const CategoryIcon = section.icon;
+
+  return (
+    <motion.div
+      initial={
+        reduceMotion
+          ? false
+          : {
+              opacity: 0,
+              y: 20,
+            }
+      }
+      whileInView={
+        reduceMotion
+          ? undefined
+          : {
+              opacity: 1,
+              y: 0,
+            }
+      }
+      viewport={{
+        once: true,
+        amount: 0.2,
+      }}
+      transition={{
+        duration: 0.45,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="
+        group
+        relative
+        overflow-hidden
+        rounded-2xl
+        border
+        border-white/[0.07]
+        bg-[#090D15]
+        p-5
+        transition-all
+        duration-300
+        hover:-translate-y-1
+        hover:border-white/[0.14]
+        sm:p-6
+      "
+    >
+
+      {/* ---------------------------------------------- */}
+      {/* SUBTLE TOP LIGHT                              */}
+      {/* ---------------------------------------------- */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-[15%]
+          top-0
+          h-px
+          w-[70%]
+          opacity-50
+          blur-[0.5px]
+          transition-all
+          duration-500
+          group-hover:left-[5%]
+          group-hover:w-[90%]
+          group-hover:opacity-100
+        "
+        style={{
+          background: `linear-gradient(
+            90deg,
+            transparent,
+            ${section.accent},
+            transparent
+          )`,
+        }}
+      />
+
+      {/* ---------------------------------------------- */}
+      {/* CORNER LIGHT                                  */}
+      {/* ---------------------------------------------- */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -right-16
+          -top-16
+          h-36
+          w-36
+          rounded-full
+          opacity-[0.04]
+          blur-3xl
+          transition-opacity
+          duration-500
+          group-hover:opacity-[0.09]
+        "
+        style={{
+          background: section.accent,
+        }}
+      />
+
+      {/* ---------------------------------------------- */}
+      {/* HEADER                                         */}
+      {/* ---------------------------------------------- */}
+
+      <div className="relative mb-5 flex items-center">
+        <div
+          className="
+            mr-3
+            flex
+            h-10
+            w-10
+            shrink-0
+            items-center
+            justify-center
+            rounded-xl
+            border
+          "
+          style={{
+            color: section.accent,
+            borderColor: `${section.accent}25`,
+            background: `${section.accent}09`,
+          }}
+        >
+          <CategoryIcon className="text-base" />
+        </div>
+
+        <div>
+          <h3 className="text-[16px] font-semibold text-slate-100">
+            {section.title}
+          </h3>
+
+          <p className="mt-0.5 text-[10px] text-slate-600">
+            {section.description}
+          </p>
+        </div>
+
+        <span
+          className="
+            ml-auto
+            font-mono
+            text-[9px]
+            tracking-widest
+          "
+          style={{
+            color: `${section.accent}80`,
+          }}
+        >
+          0{index + 1}
+        </span>
+      </div>
+
+      {/* ---------------------------------------------- */}
+      {/* DIVIDER                                        */}
+      {/* ---------------------------------------------- */}
+
+      <div className="mb-4 h-px bg-white/[0.055]" />
+
+      {/* ---------------------------------------------- */}
+      {/* SKILLS                                         */}
+      {/* ---------------------------------------------- */}
+
+      <div className="grid grid-cols-2 gap-2">
         {section.skills.map((skill) => (
-          <span
+          <SkillItem
             key={skill}
-            className="px-3 py-1 rounded-lg text-sm text-slate-200 border transition-colors"
-            style={{
-              background: "rgba(148,163,184,0.06)",
-              borderColor: "rgba(148,163,184,0.15)",
-            }}
-          >
-            {skill}
-          </span>
+            skill={skill}
+            accent={section.accent}
+          />
         ))}
+      </div>
+
+      {/* ---------------------------------------------- */}
+      {/* BOTTOM DECORATION                              */}
+      {/* ---------------------------------------------- */}
+
+      <div className="mt-5 flex items-center gap-2">
+        <div
+          className="h-1.5 w-1.5 rounded-full"
+          style={{
+            background: section.accent,
+            boxShadow: `0 0 7px ${section.accent}`,
+          }}
+        />
+
+        <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-slate-700">
+          {section.skills.length} technologies
+        </span>
+
+        <div className="ml-auto h-px w-8 bg-white/[0.06]" />
       </div>
     </motion.div>
   );
 }
 
-function Connector({ index, total, accent, scrollYProgress }) {
-  const d = useTransform(scrollYProgress, (p) => {
-    const a = layoutFor(p, index, total);
-    const b = layoutFor(p, index + 1, total);
-
-    const offX = lerp(0, CARD_W / 2, a.arrange);
-    const offY = lerp(CARD_H / 2, 0, a.arrange);
-
-    const x1 = a.x + offX;
-    const y1 = a.y + offY;
-    const x2 = b.x - offX;
-    const y2 = b.y - offY;
-    const bend = lerp(55, 22, a.arrange);
-
-    const mx = (x1 + x2) / 2;
-    const my = (y1 + y2) / 2 + bend;
-
-    return `M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`;
-  });
-
-  const dotCx = useTransform(scrollYProgress, (p) => {
-    const a = layoutFor(p, index, total);
-    const b = layoutFor(p, index + 1, total);
-    return (a.x + b.x) / 2;
-  });
-  const dotCy = useTransform(scrollYProgress, (p) => {
-    const a = layoutFor(p, index, total);
-    const b = layoutFor(p, index + 1, total);
-    const bend = lerp(55, 22, a.arrange);
-    return (a.y + b.y) / 2 + bend;
-  });
-
-  return (
-    <>
-      <motion.path
-        d={d}
-        fill="none"
-        stroke={accent}
-        strokeWidth="1.5"
-        strokeDasharray="6 8"
-        opacity="0.5"
-      />
-      <motion.circle
-        cx={dotCx}
-        cy={dotCy}
-        r="4"
-        fill={accent}
-        animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </>
-  );
-}
-
-function StaticSkills({ skillSections }) {
-  // Respect prefers-reduced-motion: a calm fade-in grid, same data.
-  return (
-    <section id="skills" className="py-28 px-4 md:px-6">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-center text-5xl font-bold gradient-text mb-16">
-          Tech Stack Journey
-        </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {skillSections.map((section, i) => (
-            <motion.div
-              key={section.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass rounded-[26px] p-8 border"
-              style={{ borderColor: `${ACCENTS[i % ACCENTS.length]}33` }}
-            >
-              <h3
-                className="text-2xl font-bold mb-4"
-                style={{ color: ACCENTS[i % ACCENTS.length] }}
-              >
-                {section.title}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {section.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 rounded-lg text-sm text-slate-200 border border-slate-700"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+/* ------------------------------------------------------- */
+/* SKILLS                                                  */
+/* ------------------------------------------------------- */
 
 function Skills() {
-  const skillSections = useMemo(
-    () => [
-      { title: "Frontend", skills: portfolioData.skills.frontend },
-      { title: "Backend", skills: portfolioData.skills.backend },
-      { title: "Database", skills: portfolioData.skills.database },
-      { title: "Tools", skills: portfolioData.skills.tools },
-    ],
+  const reduceMotion = useReducedMotion();
+
+  const sections = useMemo(
+    () =>
+      CARD_CONFIG.map((config) => ({
+        ...config,
+        skills:
+          portfolioData.skills[config.key] ||
+          [],
+      })),
     []
   );
-
-  const prefersReducedMotion = useReducedMotion();
-  const driverRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: driverRef,
-    offset: ["start start", "end end"],
-  });
-
-  const barScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const hintOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
-
-  if (prefersReducedMotion) {
-    return <StaticSkills skillSections={skillSections} />;
-  }
-
-  const n = skillSections.length;
 
   return (
     <section
       id="skills"
-      ref={driverRef}
-      className="relative"
-      style={{ height: "300vh", background: "#05070D" }}
+      className="
+        relative
+        overflow-hidden
+        bg-[#05070D]
+        px-4
+        py-24
+        sm:px-6
+        md:py-28
+      "
     >
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center">
-        {/* ambient atmosphere */}
-        <motion.div
-          className="absolute -top-40 -left-32 w-[420px] h-[420px] rounded-full blur-3xl pointer-events-none"
-          style={{ background: "#22D3EE22" }}
-          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute -bottom-40 -right-32 w-[420px] h-[420px] rounded-full blur-3xl pointer-events-none"
-          style={{ background: "#9D7BFF22" }}
-          animate={{ x: [0, -30, 0], y: [0, -30, 0] }}
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-        />
 
-        <h2 className="text-center text-4xl md:text-5xl font-bold gradient-text mb-10 z-10">
-          Tech Stack Journey
-        </h2>
+      {/* ---------------------------------------------- */}
+      {/* BACKGROUND GRID                                */}
+      {/* ---------------------------------------------- */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          opacity-[0.018]
+        "
+        style={{
+          backgroundImage: `
+            linear-gradient(
+              rgba(148,163,184,0.6) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(148,163,184,0.6) 1px,
+              transparent 1px
+            )
+          `,
+          backgroundSize: "50px 50px",
+        }}
+      />
+
+      {/* ---------------------------------------------- */}
+      {/* STATIC AMBIENT LIGHT                           */}
+      {/* ---------------------------------------------- */}
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-0
+          h-[350px]
+          w-[700px]
+          max-w-full
+          -translate-x-1/2
+        "
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(34,211,238,0.055), transparent 65%)",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-5xl">
+
+        {/* -------------------------------------------- */}
+        {/* TITLE                                        */}
+        {/* -------------------------------------------- */}
+
+        <motion.div
+          initial={
+            reduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: 15,
+                }
+          }
+          whileInView={
+            reduceMotion
+              ? undefined
+              : {
+                  opacity: 1,
+                  y: 0,
+                }
+          }
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.45,
+          }}
+          className="mb-12 text-center"
+        >
+
+          <div className="mb-3 flex items-center justify-center gap-3">
+
+            <span className="h-px w-7 bg-cyan-400/30" />
+
+            <span
+              className="
+                font-mono
+                text-[9px]
+                uppercase
+                tracking-[0.3em]
+                text-cyan-400/60
+              "
+            >
+              Technical Stack
+            </span>
+
+            <span className="h-px w-7 bg-cyan-400/30" />
+
+          </div>
+
+          <h2
+            className="
+              text-3xl
+              font-bold
+              tracking-tight
+              text-white
+              sm:text-4xl
+              md:text-5xl
+            "
+            style={{
+              fontFamily:
+                "'Space Grotesk', sans-serif",
+            }}
+          >
+            Skills &{" "}
+
+            <span
+              className="
+                bg-gradient-to-r
+                from-cyan-300
+                via-cyan-400
+                to-violet-400
+                bg-clip-text
+                text-transparent
+              "
+            >
+              Technologies
+            </span>
+
+          </h2>
+
+          <p
+            className="
+              mx-auto
+              mt-4
+              max-w-lg
+              text-sm
+              leading-6
+              text-slate-500
+            "
+          >
+            Technologies and tools I use to build
+            modern, scalable and reliable applications.
+          </p>
+
+        </motion.div>
+
+        {/* -------------------------------------------- */}
+        {/* CARDS                                        */}
+        {/* -------------------------------------------- */}
 
         <div
-  className="relative z-10 w-full"
-  style={{
-    height: 420,
-    perspective: 1400,
-  }}
+          className="
+            grid
+            grid-cols-1
+            gap-4
+            md:grid-cols-2
+            md:gap-5
+          "
         >
-          <svg
-            className="absolute inset-0 overflow-visible pointer-events-none"
-            style={{
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 1,
-              height: 1,
-            }}
-          >
-            <g style={{ transform: "translate(0px, 0px)" }}>
-              {skillSections.slice(0, -1).map((_, i) => (
-                <Connector
-                  key={i}
-                  index={i}
-                  total={n}
-                  accent={ACCENTS[i % ACCENTS.length]}
-                  scrollYProgress={scrollYProgress}
-                />
-              ))}
-            </g>
-          </svg>
-
-          <div
-            className="absolute"
-            style={{
-              left: "41%",
-              top: "40%",
-              transform: "translate(-50%, -50%)",
-              transformStyle: "preserve-3d",
-            }}
-          >
-            {skillSections.map((section, i) => (
-              <JourneyCard
-                key={section.title}
-                section={section}
-                index={i}
-                total={n}
-                accent={ACCENTS[i % ACCENTS.length]}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
-          </div>
-        </div>
-
-        <motion.p
-          style={{ opacity: hintOpacity }}
-          className="absolute bottom-10 text-slate-500 text-sm tracking-wide z-10"
-        >
-          scroll to unfurl the stack
-        </motion.p>
-
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-40 h-[2px] bg-slate-800 overflow-hidden rounded-full z-10">
-          <motion.div
-            style={{ scaleX: barScaleX, transformOrigin: "left" }}
-            className="h-full w-full"
-            initial={false}
-          >
-            <div
-              className="h-full w-full rounded-full"
-              style={{ background: "linear-gradient(90deg, #22D3EE, #9D7BFF)" }}
+          {sections.map((section, index) => (
+            <SkillCard
+              key={section.key}
+              section={section}
+              index={index}
+              reduceMotion={reduceMotion}
             />
-          </motion.div>
+          ))}
         </div>
+
       </div>
     </section>
   );
