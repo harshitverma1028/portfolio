@@ -159,22 +159,23 @@ tech: [
 },
 
 {
-title: "Auction House",
+title: "UVAS",
 description:
-"A platform where users can sell their items and make online bids.",
-image: "/images/auction.jpg",
+"URL Verification and Analysis System - A tool to verify and analyze URLs for security and performance.",
+image: "/images/uvas.jpg",
 
 github:
-"https://github.com/yourrepo",
+"https://github.com/harshitverma1028/UVAS.git",
 
 live:
 "https://yourliveproject.com",
 
 tech: [
-"HTML",
-"CSS",
+"React",
+"Tailwind CSS",
 "Javascript",
-"Bootstrap"
+"Node.js",
+"Google Safe Browsing API",
 ]
 },
 
