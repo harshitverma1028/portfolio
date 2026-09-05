@@ -162,7 +162,7 @@ tech: [
 title: "UVAS",
 description:
 "URL Verification and Analysis System - A tool to verify and analyze URLs for security and performance.",
-image: "/images/uvas.jpg",
+image: "/images/uvas.png",
 
 github:
 "https://github.com/harshitverma1028/UVAS.git",
